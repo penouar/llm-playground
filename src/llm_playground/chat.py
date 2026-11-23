@@ -13,6 +13,17 @@ JSON_SYSTEM_PROMPT = (
 )
 
 
+def print_usage(provider: LLMProvider) -> None:
+    usage = provider.last_usage
+    if usage is None:
+        print("[tokens: not reported by this provider]")
+    else:
+        print(
+            f"[tokens: in {usage.input_tokens} | "
+            f"out {usage.output_tokens} | total {usage.total}]"
+        )
+
+
 def stream_text(provider: LLMProvider, messages: list[dict]) -> str:
     """Stream the answer to the screen and return the full joined text."""
     full_text = ""
@@ -20,6 +31,7 @@ def stream_text(provider: LLMProvider, messages: list[dict]) -> str:
         print(chunk, end="", flush=True)
         full_text += chunk
     print()
+    print_usage(provider)
     return full_text
 
 
