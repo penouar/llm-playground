@@ -20,5 +20,6 @@ def main() -> None:
     load_dotenv()
     parser = argparse.ArgumentParser(description="CLI chat with swappable LLM providers")
     parser.add_argument("--provider", choices=["ollama", "openrouter"], default="ollama")
+    parser.add_argument("--json", action="store_true", help="ask for a validated JSON reply")
     args = parser.parse_args()
-    run_chat(build_provider(args.provider))
+    run_chat(build_provider(args.provider), json_mode=args.json)
