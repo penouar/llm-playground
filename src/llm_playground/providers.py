@@ -41,3 +41,16 @@ class OllamaProvider(OpenAICompatibleProvider):
 class OpenRouterProvider(OpenAICompatibleProvider):
     def __init__(self, model: str, api_key: str) -> None:
         super().__init__(model, "https://openrouter.ai/api/v1", api_key)
+
+class ScriptedProvider(LLMProvider):
+    """Fake provider that returns prepared answers, one per call. For tests."""
+
+    def __init__(self, replies: list[str]) -> None:
+        self.replies = replies
+        self.calls = 0
+
+    def stream(self, messages: list[dict]) -> Iterator[str]:
+        reply = self.replies[self.calls]
+        self.calls += 1
+        for i in range(0, len(reply), 5):
+            yield reply[i : i + 5]
