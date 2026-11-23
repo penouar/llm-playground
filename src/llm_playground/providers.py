@@ -17,10 +17,10 @@ class FakeProvider(LLMProvider):
         yield " the fake provider"
 
 
-class OllamaProvider(LLMProvider):
-    def __init__(self, model: str) -> None:
+class OpenAICompatibleProvider(LLMProvider):
+    def __init__(self, model: str, base_url: str, api_key: str) -> None:
         self.model = model
-        self.client = OpenAI(base_url="http://localhost:11434/v1", api_key="ollama")
+        self.client = OpenAI(base_url=base_url, api_key=api_key)
 
     def stream(self, messages: list[dict]) -> Iterator[str]:
         response = self.client.chat.completions.create(
@@ -31,3 +31,13 @@ class OllamaProvider(LLMProvider):
         for chunk in response:
             if chunk.choices and chunk.choices[0].delta.content:
                 yield chunk.choices[0].delta.content
+
+
+class OllamaProvider(OpenAICompatibleProvider):
+    def __init__(self, model: str) -> None:
+        super().__init__(model, "http://localhost:11434/v1", "ollama")
+
+
+class OpenRouterProvider(OpenAICompatibleProvider):
+    def __init__(self, model: str, api_key: str) -> None:
+        super().__init__(model, "https://openrouter.ai/api/v1", api_key)
