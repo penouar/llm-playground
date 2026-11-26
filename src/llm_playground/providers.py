@@ -78,3 +78,11 @@ class OllamaProvider(OpenAICompatibleProvider):
 class OpenRouterProvider(OpenAICompatibleProvider):
     def __init__(self, model: str, api_key: str) -> None:
         super().__init__(model, "https://openrouter.ai/api/v1", api_key)
+
+class GeminiProvider(OpenAICompatibleProvider):
+    def __init__(self, model: str, api_key: str) -> None:
+        super().__init__(
+            model,
+            "https://generativelanguage.googleapis.com/v1beta/openai/",
+            api_key,
+        )
