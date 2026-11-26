@@ -146,12 +146,13 @@ The tests use a `ScriptedProvider` that returns prepared answers, so the retry b
 
 ## 🧠 What I learned
 
-- The model has **no memory**. The app resends the whole message list each turn, so input tokens grow with every message.
-- Streaming chunks are **not valid JSON on their own**. Join them first, then validate.
-- Pydantic checks the **shape and types**, not whether the answer is true.
-- Small local models break JSON more often. A clear example in the prompt helps.
-- A provider interface makes switching models easy, and testing easy (fake providers).
-
+- **No memory:** the model forgets everything between calls. The app keeps the `messages` list and resends it every turn, so input tokens grow with each message (for example 83 → 118 in one chat).
+- **Streaming:** `yield` returns one chunk at a time. The function pauses after each chunk and resumes when the next is asked for, so the answer can be printed while it is still being written.
+- **JSON needs validation:** a single streamed chunk is not valid JSON, so I join all chunks first, remove code fences, and then validate with Pydantic. Pydantic checks the **shape and types**, not whether the answer is true.
+- **Retry once:** when the JSON is invalid, I send the model its own bad reply plus the error, because it cannot remember what it wrote. I retry only once to avoid infinite loops, wasted tokens, and extra API cost. In my tests a small model repeated the same mistake, so more retries would not have helped.
+- **Prompts matter:** adding one example to the system prompt made a small local model follow the JSON format much more often.
+- **Interface = flexibility:** the chat code only knows `LLMProvider`. That made it easy to add Ollama, OpenRouter, and Gemini, and to test with a fake provider.
+- **Free tiers are unreliable:** OpenRouter free models returned `429` and Gemini returned `503` at times, so error handling must be part of the design.
 
 ---
 
