@@ -139,8 +139,8 @@ The tests use a `ScriptedProvider` that returns prepared answers, so the retry b
 
 ## 📌 Status
 
-- ✅ Fully tested with **Ollama** (streaming, memory, JSON mode, token usage)
-- 🔌 **OpenRouter** and **Gemini** are implemented with the same interface. The requests reach the services, but free-tier capacity returned `429` and `503` errors during my tests.
+- ✅ Tested with **Ollama** (local) and **Gemini** (hosted): streaming, memory, JSON mode with retry, token usage
+- 🔌 **OpenRouter** is implemented with the same interface, but its free models returned `429` errors during my tests
 
 ---
 
