@@ -55,7 +55,7 @@ I built this to learn the building blocks behind every LLM app: chat roles, stre
 
 ### 2. Install
 ```bash
-git clone https://github.com/YOUR-USERNAME/llm-playground.git
+git clone https://github.com/penouar/llm-playground.git
 cd llm-playground
 uv sync
 ollama pull llama3.2:1b
