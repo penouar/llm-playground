@@ -152,7 +152,6 @@ The tests use a `ScriptedProvider` that returns prepared answers, so the retry b
 - Small local models break JSON more often. A clear example in the prompt helps.
 - A provider interface makes switching models easy, and testing easy (fake providers).
 
-*(Replace this section with 3 or 4 lines in your own words.)*
 
 ---
 
